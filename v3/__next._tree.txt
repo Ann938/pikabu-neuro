@@ -1,0 +1,7 @@
+:HL["/pikabu-neuro/_next/static/chunks/2-95f_2zbc5xg.css","style"]
+:HL["/pikabu-neuro/_next/static/media/e0d4ce99e5a5209f-s.p.1jwcpm6w583_v.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/pikabu-neuro/_next/static/media/e93dad723b20f1c1-s.p.3psl0_mnhzy2y.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/pikabu-neuro/_next/static/chunks/3j_7e8u26o0ce.css","style"]
+2:[["children",{"s":"__PAGE__","h":160}]]
+1:[["children",{"s":"v3","h":96,"c":"$Q2"}]]
+0:{"b":"D7R4YUjxveYnDbuTxTa-8","t":{"t":{"s":"","h":80,"c":"$Q1"}}}

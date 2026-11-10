@@ -1,0 +1,9 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="186" height="186" viewBox="0 0 186 186" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle id="Logo hero glow" cx="93" cy="93" r="93" fill="url(#paint0_radial_0_65)"/>
+<defs>
+<radialGradient id="paint0_radial_0_65" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(93 93) scale(93)">
+<stop stop-color="white" stop-opacity="0.96"/>
+<stop offset="1" stop-color="#E7E9F0" stop-opacity="0.1"/>
+</radialGradient>
+</defs>
+</svg>
