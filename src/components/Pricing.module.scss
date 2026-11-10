@@ -1,0 +1,197 @@
+@use "styles/core" as *;
+
+.section {
+  position: relative;
+  padding-block: u(160) u(200);
+}
+
+.inner {
+  @include container;
+  text-align: center;
+}
+
+.label {
+  @include type-label;
+}
+
+.title {
+  @include type-h2;
+  margin-top: u(20);
+}
+
+.lead {
+  @include type-lead;
+  font-size: u(17);
+  margin-top: u(16);
+  color: #c3c7dd;
+}
+
+// место под планеты из частиц
+.planets {
+  height: u(230);
+}
+
+// ---- Карточки: прозрачные, тонкая рамка, акцент снизу вверх ----
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: u(18);
+  text-align: left;
+}
+
+.card {
+  padding: u(26) u(24) u(24);
+  border-radius: u(24);
+  border: u(1) solid rgba(143, 160, 255, 0.2);
+  background: linear-gradient(180deg, rgba(11, 14, 38, 0.35), rgba(11, 14, 38, 0.65));
+  backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.5s, transform 0.5s var(--ease);
+
+  @media (hover: hover) {
+    &:hover {
+      transform: translateY(u(-6));
+      border-color: rgba(80, 223, 247, 0.55);
+    }
+  }
+}
+
+.name {
+  font-weight: 600;
+  font-size: u(18);
+  color: var(--text-2);
+}
+
+.price {
+  margin-top: u(14);
+  display: flex;
+  align-items: baseline;
+  gap: u(10);
+
+  b {
+    font-size: u(44);
+    font-weight: 700;
+    letter-spacing: u(-1.6);
+    white-space: nowrap;
+  }
+  span {
+    font-size: u(14);
+    color: var(--text-3);
+  }
+}
+
+.credits {
+  margin-top: u(6);
+  font-size: u(15);
+  font-weight: 600;
+  color: var(--cyan);
+}
+
+.features {
+  margin-top: u(22);
+  padding-top: u(18);
+  border-top: u(1) solid rgba(143, 160, 255, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: u(10);
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: u(10);
+    font-size: u(15);
+  }
+  svg {
+    flex: none;
+    width: u(18);
+    height: u(18);
+    color: var(--green);
+  }
+  [data-off] {
+    color: var(--text-3);
+    svg {
+      color: var(--text-3);
+    }
+  }
+}
+
+.models {
+  margin-top: u(22);
+  display: inline-flex;
+  align-items: center;
+  gap: u(6);
+  font-size: u(14);
+  font-weight: 500;
+  color: var(--accent-2);
+  @include focus-ring;
+
+  svg {
+    width: u(16);
+    height: u(16);
+  }
+  &:hover {
+    color: var(--text-1);
+  }
+}
+
+.cta {
+  margin-top: u(18);
+  @include btn-ghost(46);
+  width: 100%;
+  font-weight: 600;
+  @include focus-ring;
+}
+
+// главный путь — бесплатный старт: зелёная кнопка
+.card[data-plan="base"] .cta {
+  @include btn-primary(46);
+  width: 100%;
+}
+
+.note {
+  margin: u(40) auto 0;
+  max-width: u(960);
+  @include type-body;
+  font-size: u(14);
+  color: var(--text-3);
+}
+
+.more {
+  margin-top: u(16);
+  display: inline-flex;
+  align-items: center;
+  gap: u(8);
+  font-weight: 600;
+  font-size: u(15);
+  @include focus-ring;
+
+  svg {
+    width: u(18);
+    height: u(18);
+    transition: transform 0.4s var(--ease);
+  }
+  &:hover svg {
+    transform: translateX(u(4));
+  }
+}
+
+// ================= МВ =================
+@include mobile {
+  .section {
+    padding-block: u(80);
+  }
+  .lead {
+    font-size: u(15);
+  }
+  .planets {
+    height: u(150);
+  }
+  .cards {
+    grid-template-columns: minmax(0, 1fr);
+    gap: u(14);
+  }
+  .note {
+    font-size: u(13);
+  }
+}

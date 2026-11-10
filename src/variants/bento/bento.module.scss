@@ -1,0 +1,942 @@
+@use "styles/core" as *;
+
+// Вариант 3 «Бенто»: тихий, «дорогой». Плитки разного размера, тонкие рамки,
+// свет только под курсором. Один акцент — синий продукта, главное действие — зелёное.
+
+$tile-bg: #0d0f1f;
+$line: rgba(255, 255, 255, 0.07);
+
+.page {
+  background: #06070e;
+  color: var(--text-1);
+}
+
+// ---- Общие ----
+.section {
+  @include container;
+  padding-top: u(150);
+}
+.head {
+  max-width: u(820);
+  margin-bottom: u(56);
+  &[data-center] {
+    margin-inline: auto;
+    text-align: center;
+    .lead { margin-inline: auto; }
+  }
+}
+.label {
+  @include type-label;
+  color: var(--accent-2);
+}
+.h2 {
+  @include type-h2;
+  font-size: u(60);
+  letter-spacing: u(-2.4);
+  .label + & { margin-top: u(18); }
+}
+.lead {
+  margin-top: u(20);
+  max-width: u(640);
+  font-size: u(19);
+  line-height: 1.5;
+  color: var(--text-2);
+}
+.btn {
+  @include btn-primary(52);
+  @include focus-ring;
+}
+.textLink {
+  display: inline-flex;
+  gap: u(6);
+  align-items: center;
+  margin-top: u(28);
+  font-weight: 600;
+  font-size: u(16);
+  color: var(--accent-2);
+  @include focus-ring;
+  svg { width: u(16); height: u(16); transition: transform 0.3s var(--ease); }
+  &:hover svg { transform: translateX(u(4)); }
+  &[data-center] { display: flex; width: fit-content; margin-inline: auto; }
+}
+
+// Плитка: тонкая рамка, свет под курсором (--mx/--my)
+.tile {
+  position: relative;
+  border-radius: u(28);
+  background: $tile-bg;
+  border: u(1) solid $line;
+  overflow: hidden;
+  isolation: isolate;
+  transition: border-color 0.4s, transform 0.6s var(--ease);
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(u(380) circle at var(--mx, -999px) var(--my, -999px), rgba(143, 160, 255, 0.1), transparent 70%);
+    pointer-events: none;
+    z-index: 2;
+  }
+  &:hover { border-color: rgba(143, 160, 255, 0.22); }
+}
+
+// ---- Шапка ----
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: rgba(6, 7, 14, 0.72);
+  backdrop-filter: blur(16px) saturate(1.4);
+  border-bottom: u(1) solid $line;
+}
+.topInner {
+  @include container;
+  height: u(68);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.topNav {
+  display: flex;
+  gap: u(32);
+  font-size: u(14);
+  color: var(--text-2);
+  a { transition: color 0.3s; &:hover { color: #fff; } }
+}
+.topLogin {
+  height: u(38);
+  padding-inline: u(18);
+  display: inline-flex;
+  align-items: center;
+  border-radius: u(999);
+  background: #fff;
+  color: #06070e;
+  font-weight: 600;
+  font-size: u(14);
+  transition: background-color 0.3s;
+  &:hover { background: var(--green); }
+  @include focus-ring;
+}
+
+// ---- 01 Первый экран ----
+.hero {
+  @include container;
+  padding-top: u(110);
+}
+.heroHead {
+  display: flex;
+  flex-direction: column;
+  gap: u(40);
+}
+.h1 {
+  font-weight: 600;
+  font-size: u(108);
+  line-height: 0.96;
+  letter-spacing: u(-5);
+  span { color: #5b6290; }
+}
+// строка под заголовком: текст слева, действие справа
+.heroSide {
+  display: grid;
+  grid-template-columns: minmax(0, u(560)) auto;
+  justify-content: space-between;
+  align-items: end;
+  column-gap: u(40);
+  .btn { grid-column: 2; grid-row: 1; }
+  small { grid-column: 2; text-align: right; }
+  p {
+    font-size: u(17);
+    line-height: 1.5;
+    color: var(--text-2);
+  }
+  small {
+    display: block;
+    margin-top: u(14);
+    font-size: u(13);
+    color: var(--text-3);
+  }
+}
+
+.grid {
+  margin-top: u(80);
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-auto-rows: u(200);
+  gap: u(16);
+}
+.tChat {
+  grid-column: span 7;
+  grid-row: span 2;
+  padding: u(28);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background:
+    radial-gradient(120% 80% at 0% 0%, rgba(61, 76, 191, 0.28), transparent 60%),
+    $tile-bg;
+  > div {
+    width: 100%;
+  }
+}
+.tileLabel {
+  margin-bottom: auto;
+  font-size: u(26);
+  font-weight: 600;
+  letter-spacing: u(-0.6);
+  max-width: u(420);
+  line-height: 1.2;
+}
+.tImage {
+  grid-column: span 5;
+  grid-row: span 2;
+}
+.slides {
+  position: absolute;
+  inset: 0;
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(1.08);
+    transition: opacity 1.2s var(--ease), transform 4s linear;
+    &[data-on] { opacity: 1; transform: scale(1); }
+  }
+}
+.tileCap {
+  position: absolute;
+  left: u(20);
+  bottom: u(20);
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: u(8);
+  height: u(38);
+  padding-inline: u(14);
+  border-radius: u(999);
+  background: rgba(6, 7, 14, 0.6);
+  backdrop-filter: blur(12px);
+  font-size: u(14);
+  font-weight: 500;
+  svg { width: u(16); height: u(16); }
+}
+.tCount {
+  grid-column: span 3;
+  padding: u(24);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.big {
+  font-weight: 600;
+  font-size: u(92);
+  line-height: 0.9;
+  letter-spacing: u(-4);
+  background: linear-gradient(180deg, #fff, #7c86c4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-variant-numeric: tabular-nums;
+}
+.tileSmall {
+  font-size: u(15);
+  color: var(--text-2);
+}
+.tModels {
+  grid-column: span 4;
+  padding: u(24) 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  .tileSmall { padding-inline: u(24); }
+}
+.marquee {
+  overflow: hidden;
+  mask: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  > div {
+    display: flex;
+    gap: u(10);
+    width: max-content;
+    animation: marquee 18s linear infinite;
+  }
+  span {
+    display: inline-flex;
+    align-items: center;
+    gap: u(8);
+    height: u(44);
+    padding-inline: u(16);
+    border-radius: u(999);
+    border: u(1) solid $line;
+    background: rgba(255, 255, 255, 0.03);
+    font-weight: 600;
+    font-size: u(16);
+    i {
+      width: u(8);
+      height: u(8);
+      border-radius: 50%;
+      background: var(--tint);
+      box-shadow: 0 0 u(10) var(--tint);
+    }
+  }
+}
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+.tVideo {
+  grid-column: span 4;
+  grid-row: span 2;
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: kenburns 14s ease-in-out infinite alternate;
+  }
+}
+@keyframes kenburns {
+  from { transform: scale(1.02) translate(0, 0); }
+  to { transform: scale(1.18) translate(-3%, 2%); }
+}
+.play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: u(72);
+  height: u(72);
+  margin: u(-36) 0 0 u(-36);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(10px);
+  border: u(1) solid rgba(255, 255, 255, 0.3);
+  &::before {
+    content: "";
+    position: absolute;
+    left: 54%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-left: u(18) solid #fff;
+    border-block: u(11) solid transparent;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    inset: u(-1);
+    border-radius: 50%;
+    border: u(1) solid rgba(255, 255, 255, 0.5);
+    animation: ping 2.4s var(--ease) infinite;
+  }
+}
+@keyframes ping { to { transform: scale(1.7); opacity: 0; } }
+
+.tFact {
+  grid-column: span 4;
+  padding: u(24);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.factIcon {
+  width: u(30);
+  height: u(30);
+  color: var(--accent-2);
+}
+.factTitle {
+  font-size: u(24);
+  font-weight: 600;
+  letter-spacing: u(-0.5);
+  line-height: 1.2;
+}
+// плитки первого экрана — порядок по сетке
+.tCount { grid-column: 8 / span 2; grid-row: 3; }
+.tModels { grid-column: 10 / span 3; grid-row: 3; }
+.tVideo { grid-column: 1 / span 4; grid-row: 3 / span 2; }
+.tFact:nth-last-child(2) { grid-column: 5 / span 3; grid-row: 3 / span 2; }
+.tFact:last-child { grid-column: 8 / span 5; grid-row: 4; }
+
+// ---- 02 Сценарии ----
+.scGrid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-auto-rows: u(250);
+  gap: u(16);
+  a {
+    padding: u(26);
+    display: flex;
+    flex-direction: column;
+    &:hover {
+      transform: translateY(u(-4));
+      .scCta { opacity: 1; transform: none; }
+      .scImg { transform: scale(1.06); }
+    }
+    @include focus-ring;
+  }
+  // разные размеры: первая строка — три средних, дальше большие кадры вперемешку
+  [data-sc="3"] { grid-column: 8 / span 5; grid-row: 2; }
+  [data-sc="4"] { grid-column: 1 / span 7; grid-row: 2 / span 2; }
+  [data-sc="6"] { grid-column: 8 / span 5; grid-row: 3; }
+  [data-sc="5"] { grid-column: 1 / span 5; grid-row: 4 / span 2; }
+  [data-sc="7"] { grid-column: 6 / span 7; grid-row: 4 / span 2; }
+  [data-sc="8"] { grid-column: 1 / -1; grid-row: 6; }
+  [data-sc="0"], [data-sc="1"], [data-sc="2"] { grid-column: span 4; }
+  [data-art] {
+    justify-content: flex-end;
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(0deg, rgba(6, 7, 14, 0.92) 15%, rgba(6, 7, 14, 0) 65%);
+    }
+  }
+}
+.scImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+  transition: transform 1.2s var(--ease);
+}
+.scN {
+  font-size: u(13);
+  font-weight: 600;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+  [data-art] & {
+    position: absolute;
+    top: u(24);
+    left: u(26);
+    color: #fff;
+  }
+}
+.scBody {
+  margin-top: auto;
+  h3 { font-size: u(24); font-weight: 600; letter-spacing: u(-0.5); }
+  p { margin-top: u(8); font-size: u(15); line-height: 1.5; color: var(--text-2); max-width: u(460); }
+  q {
+    display: block;
+    margin-top: u(14);
+    font-size: u(14);
+    line-height: 1.45;
+    color: #c6cbf0;
+    quotes: "«" "»";
+  }
+  [data-art] & p { color: #d4d8ee; }
+}
+.scCta {
+  position: absolute;
+  top: u(22);
+  right: u(22);
+  display: inline-flex;
+  align-items: center;
+  gap: u(6);
+  height: u(34);
+  padding-inline: u(14);
+  border-radius: u(999);
+  background: #fff;
+  color: #06070e;
+  font-size: u(13);
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(u(-6));
+  transition: opacity 0.35s, transform 0.45s var(--ease);
+  svg { width: u(14); height: u(14); }
+}
+
+// ---- 03 Модели — вкладки ----
+.tabs {
+  display: inline-flex;
+  gap: u(4);
+  padding: u(5);
+  border-radius: u(999);
+  background: $tile-bg;
+  border: u(1) solid $line;
+}
+.tab {
+  position: relative;
+  height: u(46);
+  padding-inline: u(24);
+  border-radius: u(999);
+  font-weight: 600;
+  font-size: u(15);
+  color: var(--text-2);
+  overflow: hidden;
+  transition: color 0.3s, background-color 0.3s;
+  @include focus-ring;
+  &[aria-selected="true"] { background: #fff; color: #06070e; }
+  &:hover:not([aria-selected="true"]) { color: #fff; }
+}
+.tabBar {
+  position: absolute;
+  left: u(16);
+  right: u(16);
+  bottom: u(6);
+  height: u(2);
+  border-radius: u(2);
+  background: var(--tint);
+  transform-origin: left;
+  animation: tabbar 5s linear forwards;
+  &[data-paused] { animation: none; transform: scaleX(1); opacity: 0.5; }
+}
+@keyframes tabbar { from { transform: scaleX(0); } }
+.panel {
+  margin-top: u(20);
+  min-height: u(420);
+  padding: u(56);
+  border-radius: u(28);
+  background: $tile-bg;
+  border: u(1) solid $line;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.panelGlow {
+  position: absolute;
+  right: u(-120);
+  top: u(-160);
+  width: u(640);
+  height: u(640);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--tint), transparent);
+  opacity: 0.35;
+  filter: blur(u(30));
+  z-index: -1;
+  transition: background 0.8s;
+}
+.panelName {
+  font-weight: 600;
+  font-size: u(150);
+  line-height: 0.9;
+  letter-spacing: u(-7);
+  animation: up 0.8s var(--ease);
+}
+.panelText {
+  margin-top: u(22);
+  max-width: u(560);
+  font-size: u(20);
+  line-height: 1.45;
+  color: var(--text-2);
+  animation: up 0.8s 0.08s var(--ease) backwards;
+}
+@keyframes up { from { opacity: 0; transform: translateY(u(24)); } }
+.panelCta {
+  position: absolute;
+  top: u(48);
+  right: u(48);
+  display: inline-flex;
+  gap: u(6);
+  align-items: center;
+  font-weight: 600;
+  font-size: u(15);
+  @include focus-ring;
+  svg { width: u(16); height: u(16); }
+}
+
+// ---- 04 Преимущества ----
+.display {
+  font-weight: 600;
+  font-size: u(96);
+  line-height: 0.98;
+  letter-spacing: u(-4.4);
+  span { color: #5b6290; }
+}
+.specs {
+  margin-top: u(70);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: u(60);
+  > div {
+    display: grid;
+    grid-template-columns: u(280) minmax(0, 1fr);
+    gap: u(24);
+    padding-block: u(28);
+    border-top: u(1) solid $line;
+  }
+  dt {
+    display: flex;
+    gap: u(12);
+    font-weight: 600;
+    font-size: u(17);
+    line-height: 1.35;
+    svg { flex: none; width: u(20); height: u(20); color: var(--accent-2); margin-top: u(1); }
+  }
+  dd {
+    font-size: u(15);
+    line-height: 1.55;
+    color: var(--text-2);
+  }
+}
+
+// ---- 05 Применение — раскрывающиеся колонки ----
+.cols {
+  display: flex;
+  gap: u(12);
+  height: u(520);
+  li {
+    flex: 1;
+    min-width: 0;
+    transition: flex 0.8s var(--ease);
+    &[data-on] { flex: 3.6; }
+  }
+}
+.col {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: u(26);
+  overflow: hidden;
+  isolation: isolate;
+  border: u(1) solid $line;
+  text-align: left;
+  @include focus-ring;
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+    filter: grayscale(0.7) brightness(0.45);
+    transition: filter 0.8s, transform 1.2s var(--ease);
+  }
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(0deg, rgba(6, 7, 14, 0.95) 10%, transparent 70%);
+  }
+  [data-on] & img { filter: none; transform: scale(1.04); }
+}
+.colN {
+  position: absolute;
+  top: u(22);
+  left: u(24);
+  font-size: u(14);
+  font-weight: 600;
+}
+.colBody {
+  position: absolute;
+  left: u(24);
+  right: u(24);
+  bottom: u(24);
+  b {
+    display: block;
+    font-weight: 600;
+    font-size: u(20);
+    line-height: 1.2;
+    letter-spacing: u(-0.4);
+    [data-on] & { font-size: u(36); letter-spacing: u(-1.2); }
+    transition: font-size 0.6s var(--ease);
+  }
+  span {
+    display: block;
+    max-width: u(460);
+    margin-top: u(10);
+    font-size: u(16);
+    line-height: 1.5;
+    color: #d4d8ee;
+    opacity: 0;
+    max-height: 0;
+    transition: opacity 0.4s;
+    [data-on] & { opacity: 1; max-height: u(200); transition-delay: 0.3s; }
+  }
+}
+
+// ---- 06 Тарифы — таблица ----
+.plans {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-radius: u(28);
+  border: u(1) solid $line;
+  background: $tile-bg;
+  overflow: hidden;
+}
+.plan {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: u(34) u(30);
+  & + & { border-left: u(1) solid $line; }
+  &[data-plan="pro"] {
+    background: linear-gradient(180deg, rgba(61, 76, 191, 0.3), rgba(61, 76, 191, 0.05));
+  }
+}
+.planName {
+  font-weight: 600;
+  font-size: u(18);
+}
+.planPrice {
+  margin-top: u(20);
+  display: flex;
+  align-items: baseline;
+  gap: u(8);
+  b { font-weight: 600; font-size: u(48); letter-spacing: u(-2); }
+  span { font-size: u(14); color: var(--text-3); }
+}
+.planCredits {
+  margin-top: u(6);
+  font-size: u(14);
+  color: var(--accent-2);
+}
+.planFeatures {
+  margin-top: u(28);
+  padding-top: u(24);
+  border-top: u(1) solid $line;
+  display: flex;
+  flex-direction: column;
+  gap: u(12);
+  font-size: u(15);
+  li { display: flex; gap: u(10); align-items: center; &[data-off] { color: var(--text-3); } }
+  svg { width: u(16); height: u(16); color: var(--accent-2); }
+}
+.planModels {
+  margin-top: u(24);
+  display: inline-flex;
+  gap: u(6);
+  align-items: center;
+  font-size: u(14);
+  color: var(--text-2);
+  svg { width: u(14); height: u(14); }
+  &:hover { color: #fff; }
+}
+.planCta {
+  margin-top: u(28);
+  height: u(48);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: u(999);
+  border: u(1) solid rgba(255, 255, 255, 0.16);
+  font-weight: 600;
+  font-size: u(15);
+  transition: background-color 0.3s, color 0.3s;
+  &:hover { background: #fff; color: #06070e; }
+  @include focus-ring;
+  [data-plan="base"] & { @include btn-primary(48); border-radius: u(999); border: 0; }
+}
+.note {
+  margin: u(28) auto 0;
+  max-width: u(780);
+  text-align: center;
+  font-size: u(13);
+  line-height: 1.5;
+  color: var(--text-3);
+}
+
+// ---- 07 FAQ ----
+.faqCol {
+  max-width: u(860);
+  margin-inline: auto;
+}
+.faqList { display: flex; flex-direction: column; }
+.faqItem {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 0.6s var(--ease), opacity 0.5s;
+  &[data-hidden] { grid-template-rows: 0fr; opacity: 0; }
+}
+.faqInner {
+  min-height: 0;
+  overflow: hidden;
+  border-bottom: u(1) solid $line;
+}
+.faqQ {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) u(36);
+  align-items: center;
+  gap: u(16);
+  padding: u(24) 0;
+  text-align: left;
+  @include focus-ring;
+}
+.faqN { display: none; }
+.faqText { font-weight: 500; font-size: u(19); line-height: 1.35; }
+.faqSign {
+  position: relative;
+  width: u(36);
+  height: u(36);
+  border-radius: 50%;
+  border: u(1) solid rgba(255, 255, 255, 0.14);
+  transition: background-color 0.3s, transform 0.5s var(--ease);
+  i {
+    position: absolute;
+    left: 30%;
+    right: 30%;
+    top: 50%;
+    height: u(1.5);
+    margin-top: u(-0.75);
+    background: currentColor;
+    &:last-child { transform: rotate(90deg); transition: transform 0.5s var(--ease); }
+  }
+  [data-open] & { background: #fff; color: #06070e; transform: rotate(180deg); i:last-child { transform: rotate(0); } }
+}
+.faqA {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.5s var(--ease);
+  p {
+    min-height: 0;
+    overflow: hidden;
+    padding-right: u(60);
+    font-size: u(16);
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+  [data-open] & { grid-template-rows: 1fr; p { padding-bottom: u(24); } }
+}
+.faqAll {
+  margin: u(24) auto 0;
+  display: inline-flex;
+  gap: u(8);
+  align-items: center;
+  align-self: center;
+  height: u(44);
+  padding-inline: u(20);
+  border-radius: u(999);
+  border: u(1) solid rgba(255, 255, 255, 0.14);
+  font-weight: 600;
+  font-size: u(14);
+  svg { width: u(16); height: u(16); }
+  &:hover { background: rgba(255, 255, 255, 0.06); }
+}
+
+// ---- 08 Призыв ----
+.cta {
+  padding: u(110) u(40);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .lead { margin-inline: auto; }
+  .btn { margin-top: u(34); }
+}
+// медленно плывущая «сетка» градиентов
+.mesh {
+  position: absolute;
+  inset: -40%;
+  z-index: -1;
+  background:
+    radial-gradient(30% 35% at 30% 40%, rgba(61, 76, 191, 0.55), transparent 70%),
+    radial-gradient(25% 30% at 70% 60%, rgba(80, 223, 247, 0.25), transparent 70%),
+    radial-gradient(30% 30% at 55% 30%, rgba(96, 69, 223, 0.4), transparent 70%);
+  filter: blur(u(40));
+  animation: drift 16s ease-in-out infinite alternate;
+}
+@keyframes drift {
+  to { transform: rotate(40deg) scale(1.15); }
+}
+
+// ---- Подвал ----
+.footer {
+  margin-top: u(150);
+  border-top: u(1) solid $line;
+  padding-block: u(44) u(90);
+}
+.footInner { @include container; }
+.footTop,
+.footBottom { display: flex; justify-content: space-between; align-items: center; gap: u(30); }
+.footBottom { margin-top: u(30); font-size: u(13); color: var(--text-3); }
+.footNav { display: flex; gap: u(26); font-size: u(14); color: var(--text-2); }
+.footLegal,
+.footSocial { display: flex; gap: u(22); }
+
+// ================= МВ =================
+@include mobile {
+  .section { padding-top: u(90); }
+  .head { margin-bottom: u(32); }
+  .h2 { font-size: u(34); letter-spacing: u(-1.2); }
+  .lead { font-size: u(16); }
+
+  .topInner { height: u(60); }
+  .topNav { display: none; }
+
+  .hero { padding-top: u(48); }
+  .heroHead { gap: u(24); }
+  .heroSide { grid-template-columns: minmax(0, 1fr); row-gap: u(20); .btn, small { grid-column: 1; grid-row: auto; text-align: left; } }
+  .h1 { font-size: u(50); letter-spacing: u(-2.2); }
+  .heroSide .btn { width: 100%; }
+
+  .grid {
+    margin-top: u(40);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: u(170);
+    gap: u(10);
+  }
+  .tChat {
+    grid-column: 1 / -1;
+    grid-row: auto / span 3;
+    padding: u(16);
+  }
+  .tileLabel { font-size: u(20); }
+  .tImage { grid-column: 1 / -1; grid-row: auto / span 2; }
+  .tCount { grid-column: 1; grid-row: auto; padding: u(16); }
+  .big { font-size: u(64); }
+  .tModels { grid-column: 2; grid-row: auto; padding: u(16) 0; .tileSmall { padding-inline: u(16); font-size: u(13); } }
+  .tVideo { grid-column: 1 / -1; grid-row: auto / span 2; }
+  .tFact:nth-last-child(2),
+  .tFact:last-child { grid-column: auto; grid-row: auto; padding: u(16); }
+  .factTitle { font-size: u(17); }
+
+  .scGrid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-auto-rows: auto;
+    gap: u(10);
+    a { min-height: u(200); padding: u(20); }
+    [data-sc] { grid-column: auto; grid-row: auto; }
+    [data-art] { min-height: u(340); }
+  }
+  .scCta { opacity: 1; transform: none; top: u(16); right: u(16); }
+
+  .tabs {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+  }
+  .tab { flex: none; padding-inline: u(16); height: u(40); font-size: u(14); }
+  .panel { min-height: u(340); padding: u(24); }
+  .panelName { font-size: u(64); letter-spacing: u(-2.6); }
+  .panelText { font-size: u(16); }
+  .panelCta { position: static; margin-top: u(20); }
+
+  .display { font-size: u(44); letter-spacing: u(-1.8); }
+  .specs {
+    margin-top: u(36);
+    grid-template-columns: minmax(0, 1fr);
+    > div { grid-template-columns: minmax(0, 1fr); gap: u(8); padding-block: u(20); }
+  }
+
+  .cols {
+    flex-direction: column;
+    height: auto;
+    li { flex: none; height: u(84); transition: height 0.7s var(--ease); &[data-on] { height: u(340); flex: none; } }
+  }
+  .colBody b { font-size: u(18); [data-on] & { font-size: u(26); } }
+  .colBody span { font-size: u(14); }
+
+  .plans { grid-template-columns: minmax(0, 1fr); }
+  .plan + .plan { border-left: 0; border-top: u(1) solid $line; }
+  .plan { padding: u(24); }
+
+  .faqText { font-size: u(16); }
+  .faqA p { padding-right: u(8); font-size: u(14); }
+
+  .cta { padding: u(64) u(20); .btn { width: 100%; } }
+
+  .footer { margin-top: u(90); }
+  .footTop,
+  .footBottom { flex-direction: column; align-items: flex-start; }
+  .footNav,
+  .footLegal,
+  .footSocial { flex-wrap: wrap; gap: u(12) u(20); }
+}

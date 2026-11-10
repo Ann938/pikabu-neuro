@@ -1,0 +1,134 @@
+@use "core" as *;
+
+// ---- Масштаб ----
+// ДВ: числа из макета 1440, потолок — 1920. МВ: колонка 358 = экран − 32.
+:root {
+  --u: min(calc(100vw / 1440), 1.3333px);
+  @include mobile {
+    --u: min(calc((100vw - 32px) / 358), 1.8px);
+  }
+
+  // ---- Палитра: токены продукта Пикабу Нейро (Figma 446:22254) ----
+  --bg: #03040d; // s/colorBg/clear
+  --bg-2: #0b0e26; // s/colorBg/tonned
+  --panel: #121633; // c/input/bgDefault
+  --stroke: #1b214c; // s/colorBg/stroke
+  --stroke-2: #2d3680; // c/input/strokeDefault
+  --primary: #3d4cbf; // c/btn/primary/bgDefault
+  --accent: #5060d9; // s/colorTextSpecial/accent
+  --accent-2: #8fa0ff;
+  --text-1: #f2f3f7; // заголовки
+  --text-2: #a9adc4; // один серый на весь проект
+  --text-3: #6f7391;
+  // градиент маскота «пикабу НЕЙРО»
+  --cyan: #50dff7;
+  --blue: #369bfd;
+  --blue-2: #3864f0;
+  --violet: #6045df;
+  // главное действие — зелёный Пикабу
+  --green: #89cc52;
+  --green-hi: #9bdc63;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  background: var(--bg);
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+body {
+  min-height: 100svh;
+  background: var(--bg);
+  color: var(--text-1);
+  font-family: var(--font-golos), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+img,
+svg {
+  display: block;
+  max-width: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+}
+
+button {
+  cursor: pointer;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+// содержимое — над холстом нейросферы
+.content {
+  position: relative;
+  z-index: 1;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+// Появление блоков: видно и без JS; скрываем, только когда скрипт готов
+html.motion-ready [data-reveal]:not([data-revealed]) {
+  opacity: 0;
+  transform: translateY(calc(32 * var(--u)));
+}
+[data-reveal] {
+  transition:
+    opacity 0.9s var(--ease),
+    transform 1s var(--ease);
+  transition-delay: calc(var(--d, 0) * 80ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  html.motion-ready [data-reveal]:not([data-revealed]) {
+    opacity: 1;
+    transform: none;
+  }
+}

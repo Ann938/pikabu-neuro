@@ -1,0 +1,90 @@
+@use "styles/core" as *;
+
+.footer {
+  border-top: u(1) solid var(--stroke);
+  padding-block: u(56) u(48);
+}
+
+.inner {
+  @include container;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: u(32);
+}
+
+.logo {
+  border-radius: u(8);
+  @include focus-ring;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: u(8) u(32);
+
+  a {
+    font-size: u(15);
+    color: var(--text-1);
+    transition: color 0.3s;
+    @include focus-ring;
+    &:hover {
+      color: var(--cyan);
+    }
+  }
+}
+
+.bottom {
+  margin-top: u(40);
+  padding-top: u(24);
+  border-top: u(1) solid var(--stroke);
+  display: flex;
+  justify-content: space-between;
+  gap: u(24);
+  flex-wrap: wrap;
+}
+
+.legal,
+.social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: u(8) u(28);
+
+  a {
+    font-size: u(14);
+    color: var(--text-3);
+    transition: color 0.3s;
+    @include focus-ring;
+    &:hover {
+      color: var(--text-1);
+    }
+  }
+}
+
+.social a {
+  color: var(--text-2);
+}
+
+// ================= МВ =================
+@include mobile {
+  .footer {
+    padding-block: u(40) u(32);
+  }
+  .top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .nav {
+    gap: u(12) u(22);
+  }
+  .bottom {
+    flex-direction: column;
+  }
+  .legal {
+    flex-direction: column;
+    gap: u(10);
+  }
+}

@@ -1,0 +1,6 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="146" height="45" viewBox="0 0 146 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="stroke0_0_57" fill="white">
+<path d="M146 22.5C146 34.9264 113.317 45 73 45C32.6832 45 0 34.9264 0 22.5C0 10.0736 32.6832 0 73 0C113.317 0 146 10.0736 146 22.5Z"/>
+</mask>
+<ellipse id="Orbital ring" cx="73" cy="22.5" rx="73" ry="22.5" stroke-width="2.8" stroke="#D8F1FF" mask="url(#stroke0_0_57)"/>
+</svg>

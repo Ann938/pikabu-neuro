@@ -1,0 +1,303 @@
+@use "styles/core" as *;
+
+.wrap {
+  width: u(830);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: u(22);
+}
+
+// Поле в стиле продукта + бегущая по контуру подсветка (градиент маскота)
+.box {
+  position: relative;
+  width: 100%;
+  border-radius: u(28);
+  padding: u(22) u(22) u(14);
+  background: linear-gradient(180deg, rgba(23, 28, 70, 0.92), rgba(11, 14, 38, 0.94));
+  text-align: left;
+  box-shadow:
+    0 u(30) u(80) rgba(3, 4, 13, 0.7),
+    0 0 u(120) rgba(54, 155, 253, 0.12);
+  isolation: isolate;
+}
+
+.border {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: u(1.5);
+  background: conic-gradient(from var(--a, 0deg), rgba(80, 223, 247, 0.9), rgba(56, 100, 240, 0.25) 20%, rgba(96, 69, 223, 0.6) 45%, rgba(45, 54, 128, 0.35) 70%, rgba(80, 223, 247, 0.9));
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: spin 6s linear infinite;
+  z-index: -1;
+  pointer-events: none;
+}
+
+@property --a {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+@keyframes spin {
+  to {
+    --a: 360deg;
+  }
+}
+
+.field {
+  position: relative;
+  min-height: u(52);
+  padding-inline: u(4);
+
+  textarea {
+    width: 100%;
+    min-height: u(52);
+    max-height: u(160);
+    resize: none;
+    outline: none;
+    font-size: u(18);
+    line-height: 1.45;
+    color: var(--text-1);
+    caret-color: var(--cyan);
+
+    &::placeholder {
+      color: var(--text-3);
+    }
+  }
+}
+
+.ghost {
+  position: absolute;
+  inset: 0 u(4) auto;
+  font-size: u(18);
+  line-height: 1.45;
+  color: var(--text-3);
+  pointer-events: none;
+}
+
+.caret {
+  display: inline-block;
+  width: u(2);
+  height: 1.1em;
+  margin-left: u(2);
+  vertical-align: text-bottom;
+  background: var(--cyan);
+  animation: blink 1s steps(2) infinite;
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: u(10);
+  margin-top: u(14);
+  padding-top: u(12);
+  border-top: u(1) solid rgba(45, 54, 128, 0.6);
+}
+
+.model {
+  position: relative;
+}
+
+.modelBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: u(8);
+  height: u(40);
+  padding-inline: u(14) u(10);
+  border-radius: u(14);
+  background: var(--panel);
+  border: u(1) solid var(--stroke-2);
+  font-size: u(14);
+  font-weight: 500;
+  transition: border-color 0.3s;
+  @include focus-ring;
+
+  svg {
+    width: u(16);
+    height: u(16);
+  }
+  &:hover {
+    border-color: var(--accent);
+  }
+}
+
+.modelIcon {
+  color: var(--cyan);
+}
+.chev {
+  color: var(--text-3);
+}
+
+.menu {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + #{u(8)});
+  z-index: 5;
+  min-width: u(220);
+  padding: u(6);
+  border-radius: u(16);
+  background: rgba(18, 22, 51, 0.97);
+  border: u(1) solid var(--stroke-2);
+  box-shadow: 0 u(20) u(50) rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  translate: 0 u(6);
+  transition: opacity 0.2s, translate 0.3s var(--ease), visibility 0s 0.3s;
+
+  &[data-open] {
+    opacity: 1;
+    visibility: visible;
+    translate: 0 0;
+    transition: opacity 0.2s, translate 0.3s var(--ease);
+  }
+
+  button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: u(10) u(12);
+    border-radius: u(10);
+    font-size: u(14);
+    text-align: left;
+    color: var(--text-1);
+
+    &:hover,
+    &[aria-selected="true"] {
+      background: rgba(61, 76, 191, 0.4);
+    }
+    svg {
+      width: u(16);
+      height: u(16);
+      color: var(--cyan);
+    }
+  }
+}
+
+.attach {
+  display: grid;
+  place-items: center;
+  width: u(40);
+  height: u(40);
+  border-radius: u(14);
+  border: u(1) solid var(--stroke-2);
+  color: var(--text-2);
+  transition: color 0.3s, border-color 0.3s;
+  @include focus-ring;
+
+  svg {
+    width: u(18);
+    height: u(18);
+  }
+  &:hover {
+    color: var(--text-1);
+    border-color: var(--accent);
+  }
+}
+
+.send {
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  width: u(46);
+  height: u(46);
+  border-radius: u(16);
+  background: linear-gradient(135deg, var(--blue), var(--primary));
+  color: #fff;
+  box-shadow: 0 u(8) u(24) rgba(54, 155, 253, 0.35);
+  transition: transform 0.3s var(--ease), box-shadow 0.3s;
+  @include focus-ring;
+
+  svg {
+    width: u(20);
+    height: u(20);
+  }
+  &:hover {
+    transform: translateY(u(-2));
+    box-shadow: 0 u(12) u(32) rgba(80, 223, 247, 0.45);
+  }
+}
+
+// Быстрые запросы
+.quick {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: u(10);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: u(8);
+  height: u(40);
+  padding-inline: u(14) u(16);
+  border-radius: u(14);
+  border: u(1) solid rgba(45, 54, 128, 0.7);
+  background: rgba(11, 14, 38, 0.6);
+  backdrop-filter: blur(10px);
+  font-size: u(14);
+  color: var(--text-2);
+  transition: color 0.3s, border-color 0.3s, background-color 0.3s, transform 0.3s var(--ease);
+  @include focus-ring;
+
+  svg {
+    width: u(17);
+    height: u(17);
+    color: var(--accent-2);
+  }
+
+  &:hover {
+    color: var(--text-1);
+    border-color: var(--accent);
+    background: rgba(61, 76, 191, 0.25);
+    transform: translateY(u(-2));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .border {
+    animation: none;
+  }
+}
+
+// ================= МВ =================
+@include mobile {
+  .wrap {
+    width: 100%;
+    gap: u(16);
+  }
+  .box {
+    padding: u(16) u(14) u(12);
+    border-radius: u(22);
+  }
+  .field textarea,
+  .ghost {
+    font-size: u(16);
+  }
+  .field {
+    min-height: u(72);
+  }
+  .quick {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    width: 100%; // лента листается внутри колонки — поля 16 по краям
+    overflow-x: auto;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .chip {
+    flex: none;
+  }
+}

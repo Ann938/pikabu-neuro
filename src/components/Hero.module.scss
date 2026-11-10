@@ -1,0 +1,162 @@
+@use "styles/core" as *;
+
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  padding-block: u($header-h + 40) u(80);
+}
+
+.inner {
+  position: relative;
+  @include container;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+// Преимущества — тихой строкой через разделители, без «таблеток»
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: u(6) u(22);
+  font-size: u(14);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--text-2);
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    gap: u(22);
+  }
+  span + span::before {
+    content: "";
+    width: u(4);
+    height: u(4);
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 u(8) var(--cyan);
+    margin-left: u(-22);
+    margin-right: 0;
+    position: relative;
+    left: u(-9);
+  }
+}
+
+.title {
+  margin-top: u(28);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: 600;
+  font-size: u(104);
+  line-height: 0.98;
+  letter-spacing: u(-4);
+  text-shadow: 0 u(10) u(60) rgba(3, 4, 13, 0.8);
+}
+
+.accent {
+  background: linear-gradient(92deg, var(--cyan) 0%, var(--blue) 38%, #8fa0ff 70%, var(--violet) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+  padding-right: 0.12em;
+  margin-right: -0.12em;
+  padding-bottom: 0.06em;
+}
+
+.lead {
+  @include type-lead;
+  margin-top: u(26);
+  display: flex;
+  flex-direction: column;
+  color: #c3c7dd;
+}
+
+.chat {
+  margin-top: u(44);
+  position: relative;
+  z-index: 3;
+}
+
+.free {
+  margin-top: u(28);
+  font-size: u(14);
+  color: var(--text-3);
+}
+
+.sep {
+  margin-inline: u(10);
+  color: var(--accent);
+}
+
+// подсказка «листайте» — тонкая линия с бегущей точкой
+.scroll {
+  position: absolute;
+  left: 50%;
+  bottom: u(28);
+  width: u(1);
+  height: u(56);
+  background: linear-gradient(180deg, transparent, rgba(143, 160, 255, 0.5));
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: u(-1.5);
+    width: u(4);
+    height: u(12);
+    border-radius: u(4);
+    background: var(--cyan);
+    box-shadow: 0 0 u(10) var(--cyan);
+    animation: drop 2.2s var(--ease) infinite;
+  }
+}
+@keyframes drop {
+  from { transform: translateY(u(-14)); }
+  to { transform: translateY(u(60)); }
+}
+
+// ================= МВ =================
+@include mobile {
+  .hero {
+    padding-block: u($m-header-h + 24) u(64);
+  }
+  .pills {
+    gap: u(4) u(16);
+    font-size: u(12);
+    span { gap: u(16); }
+    span + span::before { margin-left: u(-16); left: u(-6); }
+  }
+  .title {
+    font-size: u(44);
+    letter-spacing: u(-1.6);
+    margin-top: u(20);
+  }
+  .lead {
+    margin-top: u(16);
+    display: block;
+    span + span::before { content: " "; }
+  }
+  .chat {
+    margin-top: u(28);
+    width: 100%;
+  }
+  .free {
+    font-size: u(12);
+    display: flex;
+    flex-direction: column;
+    gap: u(4);
+  }
+  .sep {
+    display: none;
+  }
+  .scroll {
+    display: none;
+  }
+}

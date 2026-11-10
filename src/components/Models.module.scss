@@ -1,0 +1,172 @@
+@use "styles/core" as *;
+
+.section {
+  position: relative;
+  padding-block: u(160) u(140);
+}
+
+// Текст — в левой половине; правая отдана сферам-моделям
+.inner {
+  @include container;
+}
+
+.label,
+.title,
+.lead,
+.list,
+.all {
+  max-width: u(640);
+}
+
+.label {
+  @include type-label;
+}
+
+.title {
+  @include type-h2;
+  margin-top: u(20);
+}
+
+.lead {
+  @include type-body;
+  font-size: u(17);
+  margin-top: u(22);
+  color: #c3c7dd;
+}
+
+.list {
+  margin-top: u(48);
+  border-top: u(1) solid rgba(143, 160, 255, 0.18);
+}
+
+// Строка модели: имя крупно, описание и ссылка проявляются по наведению
+.row {
+  position: relative;
+  display: grid;
+  grid-template-columns: u(22) minmax(0, 1fr) auto;
+  grid-template-areas:
+    "dot name open"
+    ". text text";
+  align-items: center;
+  column-gap: u(14);
+  padding-block: u(22);
+  border-bottom: u(1) solid rgba(143, 160, 255, 0.18);
+  @include focus-ring;
+
+  &:hover,
+  &:focus-visible {
+    .name {
+      transform: translateX(u(8));
+      color: #fff;
+    }
+    .dot {
+      background: var(--tint);
+      box-shadow: 0 0 u(14) var(--tint);
+    }
+    .text {
+      grid-template-rows: 1fr;
+      opacity: 1;
+    }
+    .open {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+.dot {
+  grid-area: dot;
+  width: u(10);
+  height: u(10);
+  border-radius: 50%;
+  background: rgba(143, 160, 255, 0.35);
+  transition: background-color 0.4s, box-shadow 0.4s;
+}
+
+.name {
+  grid-area: name;
+  font-weight: 600;
+  font-size: u(40);
+  letter-spacing: u(-1.2);
+  line-height: 1.1;
+  color: #d9ddf0;
+  transition: transform 0.5s var(--ease), color 0.4s;
+}
+
+.text {
+  grid-area: text;
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.5s var(--ease), opacity 0.4s;
+  @include type-body;
+  font-size: u(15);
+
+  > span {
+    min-height: 0;
+    overflow: hidden;
+    padding-top: u(8);
+  }
+}
+
+.open {
+  grid-area: open;
+  display: inline-flex;
+  align-items: center;
+  gap: u(6);
+  font-weight: 600;
+  font-size: u(14);
+  color: var(--cyan);
+  opacity: 0;
+  transform: translateX(u(-8));
+  transition: opacity 0.4s, transform 0.5s var(--ease);
+
+  svg {
+    width: u(16);
+    height: u(16);
+  }
+}
+
+.all {
+  margin-top: u(36);
+  @include btn-ghost(50);
+  @include focus-ring;
+
+  svg {
+    width: u(18);
+    height: u(18);
+  }
+}
+
+// на тач-экранах описание видно сразу
+@media (hover: none) {
+  .text {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    margin-top: u(6);
+  }
+  .open {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+// ================= МВ =================
+@include mobile {
+  .section {
+    padding-block: u(80) u(72);
+  }
+  .lead {
+    font-size: u(15);
+  }
+  // сферы-модели стоят над списком — оставляем им место
+  .list {
+    margin-top: u(260);
+  }
+  .name {
+    font-size: u(28);
+  }
+  .all {
+    width: 100%;
+  }
+}

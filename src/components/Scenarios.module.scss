@@ -1,0 +1,181 @@
+@use "styles/core" as *;
+
+.section {
+  position: relative;
+}
+
+// Закреплённый экран: слева заголовок, справа едущая лента
+.pin {
+  height: 100svh;
+  display: grid;
+  grid-template-columns: u(430) minmax(0, 1fr);
+  align-items: center;
+  gap: u(60);
+  padding-left: calc((100vw - #{u($content)}) / 2);
+  overflow: hidden;
+}
+
+.head {
+  position: relative;
+  z-index: 2;
+}
+
+.title {
+  @include type-h2;
+  font-size: u(52);
+}
+
+.lead {
+  @include type-body;
+  font-size: u(16);
+  margin-top: u(22);
+  color: #c3c7dd;
+}
+
+.progress {
+  display: block;
+  margin-top: u(36);
+  width: u(220);
+  height: u(2);
+  background: rgba(143, 160, 255, 0.2);
+  overflow: hidden;
+
+  i {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, var(--cyan), var(--blue));
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+}
+
+// лента обрезается у правого края заголовка и мягко в нём растворяется
+.viewport {
+  overflow: hidden;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  mask: linear-gradient(90deg, transparent, #000 u(70));
+  padding-left: u(70);
+}
+
+.track {
+  display: flex;
+  will-change: transform;
+}
+
+// Сценарий: тонкая вертикальная линия слева, без фона
+.card {
+  flex: none;
+  width: u(330);
+  padding: u(10) u(40) u(10) u(32);
+  border-left: u(1) solid rgba(143, 160, 255, 0.22);
+  display: flex;
+  flex-direction: column;
+  min-height: u(380);
+  transition: border-color 0.4s;
+
+  @media (hover: hover) {
+    &:hover {
+      border-left-color: var(--cyan);
+      .num {
+        -webkit-text-stroke-color: var(--cyan);
+        color: rgba(80, 223, 247, 0.12);
+      }
+      .cta svg {
+        transform: translateX(u(4));
+      }
+    }
+  }
+}
+
+// Номер — крупный контур
+.num {
+  font-size: u(96);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: u(-4);
+  color: transparent;
+  -webkit-text-stroke: u(1.2) rgba(143, 160, 255, 0.45);
+  transition: color 0.4s, -webkit-text-stroke-color 0.4s;
+}
+
+.cardTitle {
+  @include type-h3;
+  margin-top: u(28);
+}
+
+.text {
+  @include type-body;
+  margin-top: u(12);
+}
+
+.example {
+  margin-top: u(16);
+  font-size: u(14);
+  line-height: 1.45;
+  font-style: italic;
+  color: #d9ddff;
+  opacity: 0.85;
+}
+
+.cta {
+  margin-top: auto;
+  padding-top: u(22);
+  display: inline-flex;
+  align-items: center;
+  gap: u(8);
+  align-self: flex-start;
+  font-weight: 600;
+  font-size: u(15);
+  color: var(--cyan);
+  @include focus-ring;
+
+  svg {
+    width: u(18);
+    height: u(18);
+    transition: transform 0.4s var(--ease);
+  }
+}
+
+// ================= МВ =================
+// На телефоне без закрепления: заголовок, затем лента, которая листается свайпом
+@include mobile {
+  .pin {
+    height: auto;
+    display: block;
+    padding: u(72) 0 u(56);
+  }
+  .head {
+    @include container;
+  }
+  .title {
+    font-size: u(32);
+  }
+  .lead {
+    font-size: u(15);
+  }
+  .progress {
+    display: none;
+  }
+  .viewport {
+    mask: none;
+    display: block;
+    margin-top: u(28);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: u(16);
+    scrollbar-width: none;
+    padding-inline: u(16);
+    &::-webkit-scrollbar { display: none; }
+  }
+  .card {
+    width: u(280);
+    min-height: u(340);
+    padding: u(6) u(24) u(6) u(20);
+    scroll-snap-align: start;
+  }
+  .num {
+    font-size: u(72);
+  }
+}

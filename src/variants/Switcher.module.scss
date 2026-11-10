@@ -1,0 +1,61 @@
+// Служебная панель сравнения — фиксированные px, вне масштаба макета
+.bar {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(10, 12, 30, 0.82);
+  border: 1px solid rgba(143, 160, 255, 0.25);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+  font: 500 13px/1 var(--font-golos), system-ui, sans-serif;
+  color: #c9cdea;
+}
+
+.label {
+  padding: 0 10px 0 12px;
+  opacity: 0.6;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  transition: background-color 0.25s, color 0.25s;
+
+  b {
+    font-weight: 700;
+  }
+  &:hover {
+    background: rgba(143, 160, 255, 0.14);
+    color: #fff;
+  }
+  &[aria-current="page"] {
+    background: #89cc52;
+    color: #0c1406;
+  }
+}
+
+@media (max-width: 1023px) {
+  .bar {
+    bottom: 12px;
+  }
+  .label,
+  .item span {
+    display: none;
+  }
+  .item {
+    width: 36px;
+    justify-content: center;
+    padding: 0;
+  }
+}

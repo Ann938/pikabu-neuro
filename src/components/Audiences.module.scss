@@ -1,0 +1,144 @@
+@use "styles/core" as *;
+
+.section {
+  position: relative;
+  padding-block: u(140);
+}
+
+.inner {
+  position: relative;
+  @include container;
+  display: grid;
+  grid-template-columns: u(560) minmax(0, 1fr);
+  gap: u(80);
+}
+
+.sticky {
+  position: sticky;
+  top: calc(50svh - #{u(170)});
+}
+
+.label {
+  @include type-label;
+}
+
+.title {
+  @include type-h2;
+  font-size: u(52);
+  margin-top: u(20);
+  display: flex;
+  flex-direction: column;
+  white-space: nowrap;
+}
+
+.lead {
+  @include type-body;
+  font-size: u(16);
+  margin-top: u(28);
+  max-width: u(460);
+  color: #c3c7dd;
+}
+
+// ---- Направления: строки на тонких линиях, активная загорается ----
+.list {
+  border-top: u(1) solid rgba(143, 160, 255, 0.18);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: u(64) minmax(0, 1fr) u(28);
+  gap: u(16);
+  padding-block: u(40);
+  border-bottom: u(1) solid rgba(143, 160, 255, 0.18);
+  @include focus-ring;
+}
+
+.n {
+  font-size: u(15);
+  font-weight: 600;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+  padding-top: u(10);
+  transition: color 0.4s, text-shadow 0.4s;
+}
+
+.rowTitle {
+  display: block;
+  font-weight: 600;
+  font-size: u(32);
+  letter-spacing: u(-0.8);
+  line-height: 1.15;
+  color: var(--text-3);
+  transition: color 0.5s;
+}
+
+.text {
+  display: block;
+  margin-top: u(12);
+  @include type-body;
+  font-size: u(16);
+  max-width: u(520);
+  opacity: 0.55;
+  transition: opacity 0.5s;
+}
+
+.go {
+  width: u(24);
+  height: u(24);
+  margin-top: u(8);
+  color: var(--text-3);
+  transition: color 0.4s, transform 0.5s var(--ease);
+}
+
+[data-on] {
+  .n {
+    color: var(--cyan);
+    text-shadow: 0 0 u(12) rgba(80, 223, 247, 0.7);
+  }
+  .rowTitle {
+    color: #fff;
+  }
+  .text {
+    opacity: 1;
+  }
+  .go {
+    color: var(--cyan);
+    transform: translate(u(3), u(-3));
+  }
+}
+
+// ================= МВ =================
+@include mobile {
+  .section {
+    padding-block: u(80);
+  }
+  .inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: u(32);
+  }
+  .sticky {
+    position: static;
+  }
+  .title {
+    font-size: u(32);
+    white-space: normal;
+  }
+  .lead {
+    font-size: u(15);
+  }
+  .row {
+    grid-template-columns: u(36) minmax(0, 1fr) u(20);
+    gap: u(10);
+    padding-block: u(24);
+  }
+  .rowTitle {
+    font-size: u(22);
+  }
+  .text {
+    font-size: u(14);
+  }
+  .go {
+    width: u(20);
+    height: u(20);
+  }
+}

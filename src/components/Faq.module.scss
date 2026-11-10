@@ -1,0 +1,254 @@
+@use "styles/core" as *;
+
+.section {
+  padding-block: u(140) u(120);
+}
+
+// «Единый фон / FAQ и CTA»
+.panel {
+  position: relative;
+  @include container;
+  display: grid;
+  grid-template-columns: u(440) minmax(0, 1fr);
+  gap: u(60);
+  align-items: start;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.glow {
+  display: none;
+  position: absolute;
+  left: u(-160);
+  bottom: u(-200);
+  width: u(640);
+  height: u(520);
+  background: radial-gradient(closest-side, rgba(54, 155, 253, 0.35), transparent);
+  filter: blur(u(20));
+  z-index: -1;
+}
+
+.side {
+  position: sticky;
+  top: u($header-h + 32);
+  display: flex;
+  flex-direction: column;
+  min-height: u(560);
+}
+
+.label {
+  @include type-label;
+  color: #79a8ff;
+}
+
+.title {
+  @include type-h2;
+  font-size: u(48);
+  margin-top: u(20);
+}
+
+.cta {
+  margin-top: auto;
+  padding-top: u(48);
+}
+
+.ctaTitle {
+  font-weight: 600;
+  font-size: u(26);
+  letter-spacing: u(-0.4);
+}
+
+.ctaText {
+  @include type-body;
+  font-size: u(16);
+  margin-top: u(10);
+  max-width: u(400);
+}
+
+.btn {
+  margin-top: u(26);
+  @include btn-primary(52);
+  @include focus-ring;
+}
+
+// ---- Аккордеон ----
+.list {
+  display: flex;
+  flex-direction: column;
+  border-top: u(1) solid rgba(143, 160, 255, 0.18);
+}
+
+// Скрытые вопросы схлопываются в ноль и раскрываются плавно
+.item {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 0.6s var(--ease), opacity 0.5s, margin 0.6s var(--ease);
+
+  &[data-hidden] {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
+
+.itemInner {
+  min-height: 0;
+  overflow: hidden;
+  border-bottom: u(1) solid rgba(143, 160, 255, 0.18);
+  transition: border-color 0.4s;
+
+  .item[data-open] & {
+    border-color: rgba(80, 223, 247, 0.5);
+  }
+}
+
+.q {
+  width: 100%;
+  display: grid;
+  grid-template-columns: u(40) minmax(0, 1fr) u(28);
+  align-items: center;
+  gap: u(4);
+  padding: u(26) 0;
+  text-align: left;
+  @include focus-ring;
+
+  &:hover .qText {
+    color: #fff;
+  }
+}
+
+.n {
+  font-size: u(15);
+  font-weight: 500;
+  color: #83a9ea;
+  font-variant-numeric: tabular-nums;
+}
+
+.qText {
+  font-weight: 600;
+  font-size: u(17);
+  line-height: 1.35;
+  color: #f3f6ff;
+  transition: color 0.3s;
+}
+
+// плюс превращается в минус
+.sign {
+  position: relative;
+  width: u(20);
+  height: u(20);
+  justify-self: end;
+
+  i {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: u(2);
+    margin-top: u(-1);
+    border-radius: u(2);
+    background: #d7e6ff;
+    transition: transform 0.5s var(--ease);
+
+    &:last-child {
+      transform: rotate(90deg);
+    }
+  }
+  .item[data-open] & i:last-child {
+    transform: rotate(0);
+  }
+}
+
+.a {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.5s var(--ease);
+
+  p {
+    min-height: 0;
+    overflow: hidden;
+    padding-inline: u(44) u(60);
+    font-size: u(15);
+    line-height: 1.6;
+    color: #b6cae9;
+    transition: padding 0.5s var(--ease);
+  }
+  .item[data-open] & {
+    grid-template-rows: 1fr;
+    p {
+      padding-bottom: u(24);
+    }
+  }
+}
+
+.all {
+  margin-top: u(8);
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: u(8);
+  padding: u(10) 0;
+  font-weight: 600;
+  font-size: u(15);
+  color: #a7c9ff;
+  @include focus-ring;
+
+  svg {
+    width: u(18);
+    height: u(18);
+  }
+  &:hover {
+    color: #fff;
+  }
+}
+
+// ================= МВ =================
+@include mobile {
+  .section {
+    padding-block: u(80) u(64);
+  }
+  .panel {
+    grid-template-columns: minmax(0, 1fr);
+    gap: u(28);
+  }
+  .side {
+    position: static;
+    min-height: 0;
+    padding-inline: u(6);
+  }
+  .title {
+    font-size: u(30);
+  }
+  // призыв уходит под список вопросов
+  .side {
+    display: contents;
+  }
+  .label,
+  .title {
+    padding-inline: u(6);
+  }
+  .cta {
+    order: 2;
+    margin-top: 0;
+    padding: u(8) u(6) u(8);
+  }
+  .list {
+    order: 1;
+  }
+  .ctaTitle {
+    font-size: u(22);
+  }
+  .btn {
+    width: 100%;
+  }
+  .q {
+    grid-template-columns: u(32) minmax(0, 1fr) u(20);
+    padding: u(20) 0;
+  }
+  .qText {
+    font-size: u(15);
+  }
+  .a p {
+    padding-inline: u(36) u(8);
+    font-size: u(14);
+  }
+}

@@ -1,0 +1,95 @@
+@use "styles/core" as *;
+
+.section {
+  position: relative;
+  padding-block: u(170) u(200);
+}
+
+// ---- Сияющий заголовок ----
+// Буквы — светлый градиент, по ним проходит голубой блик (--shine от скролла)
+.title {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-weight: 700;
+  font-size: u(100);
+  line-height: 0.98;
+  letter-spacing: u(-3.8);
+  background:
+    linear-gradient(100deg, transparent calc(var(--shine, 0%) - 18%), rgba(173, 247, 251, 0.95) var(--shine, 0%), transparent calc(var(--shine, 0%) + 18%)),
+    linear-gradient(180deg, #ffffff 10%, #b9c5ff 70%, #6f7dd9);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 u(40) rgba(54, 155, 253, 0.35));
+  padding-bottom: 0.08em;
+
+  span {
+    padding-inline: 0.06em;
+  }
+}
+
+// ---- Пункты: текст на воздухе, тонкая линия сверху ----
+.grid {
+  position: relative;
+  @include container;
+  margin-top: u(140);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: u(56);
+  row-gap: u(64);
+}
+
+.item {
+  padding-top: u(26);
+  border-top: u(1) solid rgba(143, 160, 255, 0.22);
+  position: relative;
+
+  // световая точка на линии — из драфта
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: u(-3.5);
+    width: u(6);
+    height: u(6);
+    border-radius: 50%;
+    background: #e9fdff;
+    box-shadow: 0 0 u(12) u(2) rgba(80, 223, 247, 0.8);
+  }
+}
+
+.icon {
+  width: u(26);
+  height: u(26);
+  color: var(--cyan);
+}
+
+.itemTitle {
+  @include type-h3;
+  margin-top: u(18);
+}
+
+.text {
+  @include type-body;
+  margin-top: u(12);
+  color: #b9bdd3;
+}
+
+// ================= МВ =================
+@include mobile {
+  .section {
+    padding-block: u(96) u(110);
+  }
+  .title {
+    font-size: u(42);
+    letter-spacing: u(-1.4);
+  }
+  .grid {
+    margin-top: u(64);
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: u(36);
+  }
+}
